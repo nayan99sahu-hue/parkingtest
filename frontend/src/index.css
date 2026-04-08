@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
+  }
+  body {
+    @apply bg-slate-50 text-slate-800 font-sans antialiased;
+  }
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f1f5f9;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 99px;
+  }
+}
+
+@layer utilities {
+  .tap-card {
+    @apply select-none cursor-pointer active:scale-95 transition-transform duration-100;
+  }
+  .glass {
+    @apply bg-white/80 backdrop-blur-sm border border-white/60;
+  }
+}

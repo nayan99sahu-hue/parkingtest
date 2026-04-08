@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SUPER_ADMIN
+  OPERATOR
+}
+
+model User {
+  id        Int           @id @default(autoincrement())
+  name      String
+  email     String        @unique
+  password  String
+  role      Role          @default(OPERATOR)
+  createdAt DateTime      @default(now())
+  entries   TicketEntry[]
+}
+
+model TicketType {
+  id            Int             @id @default(autoincrement())
+  name          String
+  value         Int
+  color         String          @default("#3B82F6")
+  isActive      Boolean         @default(true)
+  createdAt     DateTime        @default(now())
+  serialCounter SerialCounter?
+  entries       TicketEntry[]
+}
+
+model SerialCounter {
+  id           Int        @id @default(autoincrement())
+  ticketTypeId Int        @unique
+  currentSerial Int       @default(0)
+  ticketType   TicketType @relation(fields: [ticketTypeId], references: [id], onDelete: Cascade)
+}
+
+model TicketEntry {
+  id           Int        @id @default(autoincrement())
+  ticketTypeId Int
+  quantity     Int
+  startSerial  Int
+  endSerial    Int
+  userId       Int
+  createdAt    DateTime   @default(now())
+  ticketType   TicketType @relation(fields: [ticketTypeId], references: [id])
+  user         User       @relation(fields: [userId], references: [id])
+}
